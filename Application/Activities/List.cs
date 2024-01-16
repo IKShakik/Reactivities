@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Application.Core;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -6,18 +7,18 @@ namespace Application.Activities
 {
     public class List
     {
-        public class Qeury : IRequest<List<Activity>>{}
+        public class Qeury : IRequest<Result<List<Activity>>>{}
 
-        public class Handler : IRequestHandler<Qeury, List<Activity>>
+        public class Handler : IRequestHandler<Qeury, Result<List<Activity>>>
         {
             private readonly DataContext _context;
             public Handler(DataContext context)
             {
                 _context = context;
             }
-            public async Task<List<Activity>> Handle(Qeury request, CancellationToken cancellationToken)
+            public async Task<Result<List<Activity>>> Handle(Qeury request, CancellationToken cancellationToken)
             {
-                return await _context.Activities.ToListAsync();
+                return Result<List<Activity>>.Success(await _context.Activities.ToListAsync());
             }
         }
     }

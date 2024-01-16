@@ -1,3 +1,4 @@
+using Application.Core;
 using MediatR;
 using Persistence;
 
@@ -5,12 +6,12 @@ namespace Application.Activities
 {
     public class Details
     {
-        public class Qeury : IRequest<Activity>
+        public class Qeury : IRequest<Result<Activity>>
         {
             public Guid Id { get; set; }
         }
 
-        public class Handler : IRequestHandler<Qeury, Activity>
+        public class Handler : IRequestHandler<Qeury, Result<Activity>>
         {
         private readonly DataContext _context;
             public Handler(DataContext context)
@@ -18,9 +19,10 @@ namespace Application.Activities
                 _context = context;
             }
 
-            public async Task<Activity> Handle(Qeury request, CancellationToken cancellationToken)
+            public async Task<Result<Activity>> Handle(Qeury request, CancellationToken cancellationToken)
             {
-                return await _context.Activities.FindAsync(request.Id);
+                var activity = await _context.Activities.FindAsync(request.Id);
+                return Result<Activity>.Success(activity);
             }
         }
     }
