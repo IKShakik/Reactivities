@@ -1,5 +1,5 @@
 using Application.Activities;
-using Application.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -11,6 +11,7 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new List.Qeury()));
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult> GetActivity(Guid id){
             return HandleResult(await Mediator.Send(new Details.Qeury{Id = id}));
